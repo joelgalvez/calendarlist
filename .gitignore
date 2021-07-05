@@ -1,0 +1,3 @@
+/cache/*
+!/cache/file.txt
+vue.config.js

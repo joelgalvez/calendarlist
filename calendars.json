@@ -1,0 +1,20 @@
+[
+    {
+        "title": "NL Holidays",
+        "name": "nlholidays",
+        "webpage": "https://www.officeholidays.com",
+        "ics": "http:\/\/www.officeholidays.com\/ics\/ics_country.php?tbl_country=Netherlands"
+    },
+    {
+        "title": "SE Holidays",
+        "name": "seholidays",
+        "webpage": "https://www.officeholidays.com",
+        "ics": "http:\/\/www.officeholidays.com\/ics\/ics_country.php?tbl_country=Sweden"
+    },
+    {
+        "title": "Empty Test (Disabled)",
+        "name": "empty-test",
+        "webpage": "https://www.some-site.com",
+        "ics": ""
+    }
+]
