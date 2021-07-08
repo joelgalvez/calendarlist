@@ -14,15 +14,15 @@
 						<line fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="19.4" y1="0.5" x2="0.5" y2="19.4"/>
 					</svg>
 				</div> -->
-            
+
                 <div class="domains">
                     <div class="domain" v-for="domain in domains" :key="domain.name">
-                        <DomainCheckbox 
-                            :ref="'checkbox-'+domain.name" 
+                        <DomainCheckbox
+                            :ref="'checkbox-'+domain.name"
                             :checked="domain.loaded"
-                            :domain="domain.webpage" 
-                            :error="domain.error" 
-                            :disabled="domain.disabled" 
+                            :domain="domain.webpage"
+                            :error="domain.error"
+                            :disabled="domain.disabled"
                             :loading="domain.loading"
                             :color="domain.color"
                             :title="domain.title"
@@ -37,7 +37,7 @@
                 <div class="bwrap" v-if="!showCalendarMobile">
                     <DialogButton class="show-events" @click.native="onShowEventsMobile">Show Events</DialogButton>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -102,7 +102,7 @@ export default {
             while(color.length < 6) {
                 color = '0' + color;
             }
-            
+
             return color;
         },
         loadCalendar(name) {
@@ -110,22 +110,22 @@ export default {
             if(this.domains[name].disabled || this.domains[name].loaded || this.domains[name].loading) {
                 return;
             }
-            
+
             this.domains[name].loading = true;
 
 
             fetch(`proxy.php?name=${name}`)
             .then(response => response.text())
             .then((data) => {
-                
+
                 this.domains[name].loading = false;
 
                 // if(o.apoHeaders.error) {
                 // 	this.domains[name].error = true;
                 // 	this.domains[name].errorStatus = (o.apoHeaders.message?(o.apoHeaders.message+' '):'') + '(code ' + o.apoHeaders.code + ')';
                 // }
-    
-                
+
+
                 const jcalData = ICAL.parse(data);
 
                 const comp = new ICAL.Component(jcalData);
@@ -133,16 +133,16 @@ export default {
 
                 const today = moment();
                 const futureEvents = eventComps.filter( item => {
-                    const endDate = item.getFirstPropertyValue('dtend')
-                    const end = moment(endDate.toString());
-                    return end >= today;
+                    const startDate = item.getFirstPropertyValue('dtstart')
+                    const start = moment(startDate.toString());
+                    return start >= today;
                 });
 
                 this.domains[name].status = `${futureEvents.length}&nbsp;events`;
 
                 //from https://stackoverflow.com/questions/9404685/import-ical-ics-with-fullcalendar
-                const events = eventComps.map( item => {	
-                    
+                const events = eventComps.map( item => {
+
 
                     const toreturn = {
                         "title": this.stripDomain(this.domains[name].title) + ' - ' + item.getFirstPropertyValue("summary"),
@@ -155,17 +155,21 @@ export default {
                     };
 
                     toreturn.start = item.getFirstPropertyValue("dtstart").toString();
-                    toreturn.end = item.getFirstPropertyValue("dtend").toString();
-                    if(item.getFirstPropertyValue('rrule')) {
+
+                    if (item.getFirstPropertyValue("dtend")) {
+                        toreturn.end = item.getFirstPropertyValue("dtend").toString();
+                    }
+
+                    if (item.getFirstPropertyValue('rrule')) {
                         toreturn.rrule = item.getFirstPropertyValue('rrule').toString();
                     }
-                
+
                     return toreturn;
 
                 });
 
 
-                this.domains[name].events = events; //might not need to be reactive							
+                this.domains[name].events = events; //might not need to be reactive
                 // this.$set(this.domains[name], 'test', 'test');
 
                 let c = '#'+this.genColor(this.hashCode(this.domains[name].title));
@@ -173,14 +177,14 @@ export default {
 
                 this.$set(this.domains[name], 'color', c);
                 this.$set(this.domains[name], 'loaded', true);
-                
+
 
                 this.$refs.calendar.getApi().addEventSource({
                     id: name,
                     events: events,
                     color: this.domains[name].color
                 })
-                
+
 
 
 
@@ -227,10 +231,10 @@ export default {
             fetch(this.$root.src)
             .then(response => response.text())
             .then((data) => {
-                let list = JSON.parse(data);            
-                
+                let list = JSON.parse(data);
+
                 for(let cal of list) {
-                    
+
                     let d = {
                         'name': cal.name,
                         'title': cal.title,
@@ -238,12 +242,12 @@ export default {
                         'disabled': cal.ics==''
                     }
                     this.$set(this.domains, cal.name, d );
-                    
+
                     if(!d.disabled) {
                         this.loadCalendar(d.name);
                     }
 
-                    
+
                 }
             })
         }
@@ -260,7 +264,7 @@ export default {
     .grid {
         padding:0.5rem 0;
         @media (min-width:930px) {
-            display:grid;   
+            display:grid;
             grid-template-columns: 1fr auto;
             padding:0.5rem;
             grid-gap:0.5rem;
@@ -277,7 +281,7 @@ export default {
         width:18rem;
 
         overflow-y:scroll;
-        
+
         @media (max-width: 930px) {
             width:100%;
         }
@@ -291,7 +295,7 @@ export default {
         font-weight:300;
 
         // resize: horizontal;
-        
+
         // background-color:gray;
 
         .subscribe {
@@ -326,7 +330,7 @@ export default {
 			// // border: 2px solid;
             // // border-radius:0.25rem;
             // padding:0.75rem;
-			
+
 			box-shadow: 0 0 1rem rgba(255,100,100,0.8);
 
 		}
@@ -382,12 +386,12 @@ export default {
 
 
         // box-shadow: 0 0 2rem rgba(0, 0, 0, 0.267);
-        
+
         background-color:white;
         @media (max-width: 930px) {
             width:100%;
             grid-row: 2 / 3;
-            
+
             display:none;
             pointer-events:none;
             .fc-center {
