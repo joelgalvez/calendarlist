@@ -10,12 +10,12 @@ Showing a list of .ics files (iCalendar) in one calendar
 
 ## Directory Structure
 ```
-/app-source     - vue app source
-/cache          - empty folder, will contain cached files
-/dist           - compiled vue.js app
-
-/proxy.php      - simple proxy
-/calendars.json - contains all calendars
+/src/app                - vue app source
+/src/server
+    /proxy.php          - simple proxy
+    /calendars.json     - contains all calendars
+    /cache/             - empty folder, will contain cached files
+/public                 - static files, ie. favicon.ico and fonts
 ```
 
 ## How it works
@@ -26,6 +26,33 @@ proxy.php?name=xxxx
 
 ## Configure
 You can change the urls of calendars.json and proxy.php as attributes to the app in index.html
+
+
+# App Setup
+
+## Project setup
+
+Create a `.env` file in the root with the variable `VUE_PROXY_HOST=localhost:XXXX`. This environment variuable should point to a php server that serves `proxy.php`. For example, launch a simple server with `php -S localhost:XXXX -t src/server/`.
+
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
 
 ## Todo
 - "proxy.php" is now hardcoded
