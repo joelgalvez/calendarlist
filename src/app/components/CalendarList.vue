@@ -141,32 +141,60 @@ export default {
                 this.domains[name].status = `${futureEvents.length}&nbsp;events`;
 
                 //from https://stackoverflow.com/questions/9404685/import-ical-ics-with-fullcalendar
-                const events = eventComps.map( item => {
+                const events = eventComps.map(item => {
+                        const event = {
+                            title: `${this.stripDomain(this.domains[name].title)} - ${item.getFirstPropertyValue("summary")}`,
+                            domain: name,
+                            location: item.getFirstPropertyValue("location"),
+                            description: item.getFirstPropertyValue("description"),
+                            url: item.getFirstPropertyValue("url"),
+                            uid: item.getFirstPropertyValue("uid")
+                        }
+                        event.attach = item.getFirstPropertyValue("attach")
 
+                        if (event.attach) {
+                            // google, attachement needs to be public to be visible.
+                            if (/drive.google.com/.test(event.attach)) {
+                                const id = event.attach.split("/")[5]
+                                event.attach = `https://drive.google.com/uc?export=view&id=${id}`
+                            }
 
-                    const toreturn = {
-                        "title": this.stripDomain(this.domains[name].title) + ' - ' + item.getFirstPropertyValue("summary"),
-                        "domain": name,
-                        "location": item.getFirstPropertyValue("location"),
-                        "description": item.getFirstPropertyValue("description"),
-                        "url": item.getFirstPropertyValue("url"),
-                        "image": item.getFirstPropertyValue("attach"),
-                        "uid": item.getFirstPropertyValue("uid")
-                    };
+                            // microsoft?
+                        }
 
-                    toreturn.start = item.getFirstPropertyValue("dtstart").toString();
+                        event.start = item.getFirstPropertyValue("dtstart").toString()
+                        event.allDay = event.start.split("T")[1] == undefined
 
-                    if (item.getFirstPropertyValue("dtend")) {
-                        toreturn.end = item.getFirstPropertyValue("dtend").toString();
-                    }
+                        if (item.getFirstPropertyValue("dtend")) {
+                            event.end = item.getFirstPropertyValue("dtend").toString()
+                            event.duration = new Date(event.end) - new Date(event.start)
+                        }
 
-                    if (item.getFirstPropertyValue('rrule')) {
-                        toreturn.rrule = item.getFirstPropertyValue('rrule').toString();
-                    }
+                        if (item.getFirstPropertyValue("rrule")) {
+                            const rrule = item.getFirstPropertyValue("rrule")
 
-                    return toreturn;
+                            event.rrule = {
+                                freq: rrule.freq,
+                                dtstart: event.start,
+                                tzid: "Europe/Amsterdam"
+                            }
 
-                });
+                            if (rrule.parts.BYWEEK || rrule.parts.BYDAY) {
+                                event.rrule.byweekday = rrule.parts.BYDAY
+                            }
+                            if (rrule.parts.BYMONTH) {
+                                event.rrule.bymonth = rrule.parts.BYMONTH
+                            }
+                            if (rrule.until) {
+                                event.rrule.until = rrule.until.toString()
+                            }
+                            if (rrule.interval) {
+                                event.rrule.interval = rrule.interval.toString()
+                            }
+                        }
+
+                        return event
+                    })
 
 
                 this.domains[name].events = events; //might not need to be reactive
