@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+    calendar:
+        container_name: calendarlist
+        build:
+            context: .
+            target: production
+        image: calendarlist:0.1.0
+        restart: always
+        ports:
+            - 127.0.0.1:8080:80
