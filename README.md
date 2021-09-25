@@ -55,7 +55,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 ## Todo
-- "proxy.php" is now hardcoded
 - Error handling from the proxy. If the proxy throws an error now, nothing happens.
 - Lift out all CSS to an external file to make it easier to style
 - How data is passed around in the vue app could be structured better
