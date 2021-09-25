@@ -114,7 +114,7 @@ export default {
             this.domains[name].loading = true;
 
 
-            fetch(`proxy.php?name=${name}`)
+            fetch(`${this.$root.proxy}?name=${name}`)
             .then(response => response.text())
             .then((data) => {
 
@@ -148,6 +148,7 @@ export default {
                             location: item.getFirstPropertyValue("location"),
                             description: item.getFirstPropertyValue("description"),
                             url: item.getFirstPropertyValue("url"),
+                            image: item.getFirstPropertyValue("attach"),
                             uid: item.getFirstPropertyValue("uid")
                         }
                         event.attach = item.getFirstPropertyValue("attach")
