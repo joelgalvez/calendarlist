@@ -1,6 +1,6 @@
 ## What is this?
 
-Showing a list of .ics files (iCalendar) in one calendar
+Showing a list of .ics files (iCalendar) in one calendar. It's part of the project [publicdata.events](https://publicdata.events/)
 
 
 ## Install
