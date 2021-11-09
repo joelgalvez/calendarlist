@@ -3,6 +3,11 @@
 Showing a list of .ics files (iCalendar) in one calendar. It's part of the project [publicdata.events](https://publicdata.events/)
 
 
+##Demo
+
+[publicdata.events/amsterdamart](https://publicdata.events/amsterdamart)
+
+
 ## Install
 1. git clone into a virtual root that can run PHP
 2. Maybe set some permissions so the proxy php can write to /cache
