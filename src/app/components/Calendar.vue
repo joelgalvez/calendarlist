@@ -17,7 +17,7 @@
     import FullCalendar from '@fullcalendar/vue';
     import interactionPlugin from '@fullcalendar/interaction'
 
-	// import rrulePlugin from '@fullcalendar/rrule';
+	import rrulePlugin from '@fullcalendar/rrule';
 
 	import dayGridPlugin from '@fullcalendar/daygrid';
 	import timeGridPlugin from '@fullcalendar/timegrid';
@@ -44,7 +44,7 @@
                     listDaySideFormat: true,
                     height: 'calc(100vh - 1rem)',
 
-                    plugins: [ dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+                    plugins: [ rrulePlugin, dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
                     headerToolbar: {
                         left: 'dayGridMonth,timeGridWeek,timeGridDay,list60',
                         center: 'title',
@@ -141,7 +141,7 @@
                 display:block;
             }
             position:fixed;
-            top:4.5rem;
+            top:8rem;
             left:0rem;
             
             // padding:0.5rem;

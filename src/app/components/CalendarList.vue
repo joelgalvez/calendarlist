@@ -114,7 +114,7 @@ export default {
             this.domains[name].loading = true;
 
 
-            fetch(`${this.$root.proxy}?name=${name}`)
+            fetch(`${this.$root.proxy}${name}`)
             .then(response => response.text())
             .then((data) => {
 
@@ -162,37 +162,45 @@ export default {
 
                             // microsoft?
                         }
+                        let rrule = item.getFirstPropertyValue("rrule");
+                        if(rrule) {
+                            // console.log();
+                            event.rrule = rrule.toString();
+                            // console.log(event.rrule);
 
-                        event.start = item.getFirstPropertyValue("dtstart").toString()
-                        event.allDay = event.start.split("T")[1] == undefined
-
-                        if (item.getFirstPropertyValue("dtend")) {
-                            event.end = item.getFirstPropertyValue("dtend").toString()
-                            event.duration = new Date(event.end) - new Date(event.start)
                         }
+                        
 
-                        if (item.getFirstPropertyValue("rrule")) {
-                            const rrule = item.getFirstPropertyValue("rrule")
+                        // event.start = item.getFirstPropertyValue("dtstart").toString()
+                        // event.allDay = event.start.split("T")[1] == undefined
 
-                            event.rrule = {
-                                freq: rrule.freq,
-                                dtstart: event.start,
-                                tzid: "Europe/Amsterdam"
-                            }
+                        // if (item.getFirstPropertyValue("dtend")) {
+                        //     event.end = item.getFirstPropertyValue("dtend").toString()
+                        //     event.duration = new Date(event.end) - new Date(event.start)
+                        // }
 
-                            if (rrule.parts.BYWEEK || rrule.parts.BYDAY) {
-                                event.rrule.byweekday = rrule.parts.BYDAY
-                            }
-                            if (rrule.parts.BYMONTH) {
-                                event.rrule.bymonth = rrule.parts.BYMONTH
-                            }
-                            if (rrule.until) {
-                                event.rrule.until = rrule.until.toString()
-                            }
-                            if (rrule.interval) {
-                                event.rrule.interval = rrule.interval.toString()
-                            }
-                        }
+                        // if (item.getFirstPropertyValue("rrule")) {
+                        //     const rrule = item.getFirstPropertyValue("rrule")
+
+                        //     event.rrule = {
+                        //         freq: rrule.freq,
+                        //         dtstart: event.start,
+                        //         tzid: "Europe/Amsterdam"
+                        //     }
+
+                        //     if (rrule.parts.BYWEEK || rrule.parts.BYDAY) {
+                        //         event.rrule.byweekday = rrule.parts.BYDAY
+                        //     }
+                        //     if (rrule.parts.BYMONTH) {
+                        //         event.rrule.bymonth = rrule.parts.BYMONTH
+                        //     }
+                        //     if (rrule.until) {
+                        //         event.rrule.until = rrule.until.toString()
+                        //     }
+                        //     if (rrule.interval) {
+                        //         event.rrule.interval = rrule.interval.toString()
+                        //     }
+                        // }
 
                         return event
                     })
@@ -290,8 +298,12 @@ export default {
 <style lang="scss" scoped>
 
 .calendar-list {
+    font-family: Inter;
     .grid {
         padding:0.5rem 0;
+        
+        overflow:hidden;
+        // overflow-y:scroll;
         @media (min-width:930px) {
             display:grid;
             grid-template-columns: 1fr auto;
@@ -308,6 +320,7 @@ export default {
 
         // grid-column: 1 / 2;
         width:18rem;
+        height:calc(100vh - 5.5rem);
 
         overflow-y:scroll;
 
