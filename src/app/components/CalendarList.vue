@@ -171,13 +171,13 @@ export default {
                         }
                         
 
-                        // event.start = item.getFirstPropertyValue("dtstart").toString()
-                        // event.allDay = event.start.split("T")[1] == undefined
+                        event.start = item.getFirstPropertyValue("dtstart").toString()
+                        event.allDay = event.start.split("T")[1] == undefined
 
-                        // if (item.getFirstPropertyValue("dtend")) {
-                        //     event.end = item.getFirstPropertyValue("dtend").toString()
-                        //     event.duration = new Date(event.end) - new Date(event.start)
-                        // }
+                        if (item.getFirstPropertyValue("dtend")) {
+                            event.end = item.getFirstPropertyValue("dtend").toString()
+                            event.duration = new Date(event.end) - new Date(event.start)
+                        }
 
                         // if (item.getFirstPropertyValue("rrule")) {
                         //     const rrule = item.getFirstPropertyValue("rrule")
